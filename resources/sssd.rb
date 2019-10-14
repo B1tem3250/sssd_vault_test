@@ -8,7 +8,6 @@ property :token, String, required: true
 property :role_name, String, required: false
 
 action :read do
-
   Vault.address = new_resource.address
 
   Vault.token = new_resource.token

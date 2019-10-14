@@ -13,8 +13,8 @@ require 'vault'
 
 read_vault 'Read secret at secret/data/my-app' do
   path 'secret/data/my-app'
-  address 'http://192.168.8.15:8200'
-  token 's.dCj8yx0WY5q3xXdX9hhucAAn'
+  address 'http://vaultserver:8200'
+  token 'your-token-here'
   role_name 'chef-role'
   notifies :create, 'template[/etc/sssd/sssd.conf]', :immediately
 end
@@ -36,12 +36,12 @@ end
 # end
 
 template '/etc/sssd/sssd.conf' do
-    source 'sssd.erb'
-    sensitive true
-    variables lazy {
-      {
-      ldap_default_bind_dn: node.run_state['secret/data/my-app'].data[:data][:username],
-      ldap_default_authtok: node.run_state['secret/data/my-app'].data[:data][:password],
-      }
+  source 'sssd.erb'
+  sensitive true
+  variables lazy {
+    {
+    ldap_default_bind_dn: node.run_state['secret/data/my-app'].data[:data][:username],
+    ldap_default_authtok: node.run_state['secret/data/my-app'].data[:data][:password],
     }
-  end
+  }
+end
